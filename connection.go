@@ -1,21 +1,28 @@
-package connection
+package sql_utils
 
 import (
   "database/sql"
-  "database/sql/driver"
   _ "github.com/go-sql-driver/mysql"
 )
 
-var Db driver.Conn
+type Connection struct {
+  Username  string
+  Password  string
+  DbName    string
+}
 
-func Open(username string, password string, dbname string) *driver.Conn {
+func (c Connection) Open() *sql.DB{
   var err error
 
-  Db, err = sql.Open("mysql", connectionString(username, password, dbname) )
+  db, err := sql.Open("mysql", connectionString(c.Username, c.Password, c.DbName) )
   
   if err != nil {
     panic(err)
   }
 
-  return &Db
+  return db
+}
+
+func connectionString(username string, password string, dbname string) string {
+  return username + ":" + password + "@/" + dbname
 }
