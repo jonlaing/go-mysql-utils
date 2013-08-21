@@ -51,3 +51,47 @@ func TestFieldList(t *testing.T) {
     t.Error("Expected field list of \"id\",\"name\" got " + strings.Join(list, ","))
   }
 }
+
+func TestTableCreation(t *testing.T) {
+  var s SqlUtil
+  s.Conn.GetConfiguration("config.gcfg","test")
+
+  if s.TableExists("model") {
+    err := s.DropTable("model")
+
+    if err != nil {
+      t.Error("Error removing table for creation")
+    }
+  }
+
+  err := s.CreateTable("model", &Model{})
+  if err != nil {
+    t.Error("Error creating table \"model\": ", err)
+  }
+
+  if !s.TableExists("model") {
+    t.Error("Table should exist")
+  }
+}
+
+func TestTableDrop(t *testing.T) {
+  var s SqlUtil
+  s.Conn.GetConfiguration("config.gcfg", "test")
+
+  if !s.TableExists("model") {
+    err := s.CreateTable("model", &Model{})
+    if err != nil {
+      t.Error("Error creating table \"model\" for deletion: ", err)
+    }
+  }
+
+  err := s.DropTable("model")
+
+  if err != nil {
+    t.Error("Error dropping table \"model\": ", err)
+  }
+
+  if s.TableExists("model") {
+    t.Error("Table shouldn't exist")
+  }
+}
