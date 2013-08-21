@@ -1,0 +1,6 @@
+; Fill this in to test
+[env "test"]
+username  = ""
+password  = ""
+address  = ""
+dbname    = ""
