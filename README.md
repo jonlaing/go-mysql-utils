@@ -2,6 +2,14 @@
 
 This project was born as a result of a Rails developer (me) being completely incapable of thinking about web apps in a non-Railsy way. I feared the old non-MVC style way I used to develop PHP apps, and I cringed. I really liked Go so far, and its syntax screamed to me that there had to be a better way. I looked around at ORM's and the likes, and I was pretty underwhelmed, so I decided to roll my own.
 
+## Installation
+
+Simple install the package to your [$GOPATH](http://code.google.com/p/go-wiki/wiki/GOPATH "GOPATH") with the [go tool](http://golang.org/cmd/go/ "go command") from shell:
+```bash
+$ go get github.com/jonlaing/go-mysql-utils
+```
+Make sure [Git is installed](http://git-scm.com/downloads) on your machine and in your system's `PATH`.
+
 ## Usage
 
 ### A Railsy Model
