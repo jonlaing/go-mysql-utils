@@ -24,11 +24,11 @@ import (
 // into MySQL statements. Primary Keys are denoted by writing `pk` 
 // preceded by a comma. Otherwise, these statements must be valid MySQL.
 type Post struct {
-	Id int `mysql:"id INT NOT NULL AUTO_INCREMENT,pk"`
-	Title string `mysql:"title VARCHAR(20) NOT NULL"`
-	Body string `mysql:"body TEXT NOT NULL"`
-	Created time.Time `mysql:"created DATETIME"`
-	Updated time.Time `mysql:"updated DATETIME"`
+	Id 	int 		`mysql:"id INT NOT NULL AUTO_INCREMENT,pk"`
+	Title 	string 		`mysql:"title VARCHAR(20) NOT NULL"`
+	Body 	string 		`mysql:"body TEXT NOT NULL"`
+	Created time.Time 	`mysql:"created DATETIME"`
+	Updated time.Time 	`mysql:"updated DATETIME"`
 }
 
 var s MysqlUtil
