@@ -27,8 +27,8 @@ type Post struct {
 	Id int `mysql:"id INT NOT NULL AUTO_INCREMENT,pk"`
 	Title string `mysql:"title VARCHAR(20) NOT NULL"`
 	Body string `mysql:"body TEXT NOT NULL"`
-	Created time.Time `mysql:"created DATETIME"
-	Updated time.Time `mysql:"updated DATETIME"
+	Created time.Time `mysql:"created DATETIME"`
+	Updated time.Time `mysql:"updated DATETIME"`
 }
 
 var s MysqlUtil
