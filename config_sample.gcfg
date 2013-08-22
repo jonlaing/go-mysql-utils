@@ -1,4 +1,4 @@
-; Fill this in to test
+; Fill this in and rename to config.gcfg to run tests
 [env "test"]
 username  = ""
 password  = ""
