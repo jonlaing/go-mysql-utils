@@ -9,7 +9,7 @@ import (
 )
 
 type MysqlUtil struct {
-  Conn Connection
+  Conn Connection // A helper to connect to the MySQL DB
 }
 
 
@@ -54,7 +54,10 @@ func (s MysqlUtil) DropTable(tablename string) error {
   return err
 }
 
-func (s MysqlUtil) TableExists(tablename string) bool {
+// Check if the table is ready to take queries. This can be used to check
+// for a table's existence, more or less, since there really isn't a 
+// sure-fire way to do that in MySQL.
+func (s MysqlUtil) TableReady(tablename string) bool {
   db := s.Conn.Open()
   defer db.Close()
 
@@ -130,6 +133,7 @@ func (s MysqlUtil) PrimaryKeys(i interface{}) []string {
   return pks
 }
 
+// Builds the `CREATE TABLE` string.
 func (s MysqlUtil) buildCreateTableStatement(tablename string, i interface{}) (create_statement string) {
   fields, pks := s.parseFields(i)
   create_statement = "CREATE TABLE IF NOT EXISTS " + tablename + " ("
@@ -145,6 +149,7 @@ func (s MysqlUtil) buildCreateTableStatement(tablename string, i interface{}) (c
   return
 }
 
+// Parses out the fields of a struct to MySQL friendly fields.
 func (s MysqlUtil) parseFields(i interface{}) (sqlfields, primaryKeys []string) {
   var fieldsql string
 

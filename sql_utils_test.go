@@ -57,7 +57,7 @@ func TestTableCreation(t *testing.T) {
   var s MysqlUtil
   s.Conn.GetConfiguration("config.gcfg","test")
 
-  if s.TableExists("model") {
+  if s.TableReady("model") {
     err := s.DropTable("model")
 
     if err != nil {
@@ -70,7 +70,7 @@ func TestTableCreation(t *testing.T) {
     t.Error("Error creating table \"model\": ", err)
   }
 
-  if !s.TableExists("model") {
+  if !s.TableReady("model") {
     t.Error("Table should exist")
   }
 }
@@ -79,7 +79,7 @@ func TestTableDrop(t *testing.T) {
   var s MysqlUtil
   s.Conn.GetConfiguration("config.gcfg", "test")
 
-  if !s.TableExists("model") {
+  if !s.TableReady("model") {
     err := s.CreateTable("model", &Model{})
     if err != nil {
       t.Error("Error creating table \"model\" for deletion: ", err)
@@ -92,7 +92,7 @@ func TestTableDrop(t *testing.T) {
     t.Error("Error dropping table \"model\": ", err)
   }
 
-  if s.TableExists("model") {
+  if s.TableReady("model") {
     t.Error("Table shouldn't exist")
   }
 }
