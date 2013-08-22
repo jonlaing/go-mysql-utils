@@ -55,6 +55,28 @@ func Find(id int) (p Post) {
 }
 ```
 
+### Using your Railsy model
+
+Here is an example program that is next to useless. You'd probably want to use this in conjunction with a controller, but I'm too lazy to write one here. This should illustrate the point fairy well, though.
+
+```go
+import (
+	"fmt"
+	"post"
+)
+
+func main() {
+	post := post.Find(3)
+
+	fmt.Println("Title:", post.Title)
+	fmt.Println("Body:", post.Body)
+}
+```
+
+Pretty straight forward, right?
+
 ## TODO
 
 I need to confirm that all of this works. This is really not stable, and if you're doing anything more than screwing around, I wouldn't rely on this just yet. I haven't even used it on a project yet. Do you see how young this repository is? There's likely to be a lot of revision. Seriously, don't use this for anything important yet.
+
+I'm also on the fence about whether I want to have an automated model generator much like Rails' `rails generate model post`. I'm not sure if that's inline with the Go mentality or not. I guess time will tell.
