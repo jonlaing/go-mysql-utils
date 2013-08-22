@@ -1,4 +1,4 @@
-package sql_utils
+package mysql_utils
 
 import (
   "testing"
@@ -10,10 +10,9 @@ type Model struct {
   Name  string  `mysql:"name VARCHAR(20) NOT NULL"`
 }
 
-var sqlUtil SqlUtil
-
 func TestParseFields(t *testing.T) {
-  fields, pks := sqlUtil.parseFields(&Model{})
+  var s MysqlUtil
+  fields, pks := s.parseFields(&Model{})
   
   if fields[0] != "id INT NOT NULL AUTO_INCREMENT" {
     t.Error("First field of Model expected \"id INT NOT NULL AUTO_INCREMENT\", but got " + fields[0])
@@ -33,7 +32,8 @@ func TestParseFields(t *testing.T) {
 }
 
 func TestBuildingCreateStatement(t *testing.T) {
-  statement := sqlUtil.buildCreateTableStatement("model", &Model{})
+  var s MysqlUtil
+  statement := s.buildCreateTableStatement("model", &Model{})
 
   if len(statement) < 1 {
     t.Error("Expected to be string with length")
@@ -45,7 +45,8 @@ func TestBuildingCreateStatement(t *testing.T) {
 }
 
 func TestFieldList(t *testing.T) {
-  list := sqlUtil.FieldList(&Model{})
+  var s MysqlUtil
+  list := s.FieldList(&Model{})
 
   if list[0] != "id" || list[1] != "name" {
     t.Error("Expected field list of \"id\",\"name\" got " + strings.Join(list, ","))
@@ -53,7 +54,7 @@ func TestFieldList(t *testing.T) {
 }
 
 func TestTableCreation(t *testing.T) {
-  var s SqlUtil
+  var s MysqlUtil
   s.Conn.GetConfiguration("config.gcfg","test")
 
   if s.TableExists("model") {
@@ -75,7 +76,7 @@ func TestTableCreation(t *testing.T) {
 }
 
 func TestTableDrop(t *testing.T) {
-  var s SqlUtil
+  var s MysqlUtil
   s.Conn.GetConfiguration("config.gcfg", "test")
 
   if !s.TableExists("model") {

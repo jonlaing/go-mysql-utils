@@ -1,4 +1,4 @@
-package sql_utils
+package mysql_utils
 
 import (
   "testing"

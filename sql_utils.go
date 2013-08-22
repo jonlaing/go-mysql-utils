@@ -1,5 +1,5 @@
-// A group of utitlities to deal with SQL in a more Object Oriented way.
-package sql_utils
+// A group of utitlities to deal with MySQL in a more Object Oriented way.
+package mysql_utils
 
 import (
   "reflect"
@@ -8,7 +8,7 @@ import (
   "database/sql"
 )
 
-type SqlUtil struct {
+type MysqlUtil struct {
   Conn Connection
 }
 
@@ -22,7 +22,7 @@ Example:
     Name  string  `mysql:"name VARCHAR(20) NOT NULL"`
   }
 
-  var s SqlUtil
+  var s MysqlUtil
   s.Conn.GetConfiguration("config.gcfg","test")
 
   err := s.CreateTable("model", &Model{})
@@ -34,7 +34,7 @@ The `mysql` tags in the struct are necessary. The portion before the comma will 
 
 This function will only create the table if it doesn not already exist.
 */
-func (s SqlUtil) CreateTable(tablename string, i interface{}) error {
+func (s MysqlUtil) CreateTable(tablename string, i interface{}) error {
   db := s.Conn.Open() 
   defer db.Close()
 
@@ -46,7 +46,7 @@ func (s SqlUtil) CreateTable(tablename string, i interface{}) error {
 
 // Drop a MySql table. This function will only drop the table if it
 // does not already exist
-func (s SqlUtil) DropTable(tablename string) error {
+func (s MysqlUtil) DropTable(tablename string) error {
   db := s.Conn.Open()
   defer db.Close()
 
@@ -54,7 +54,7 @@ func (s SqlUtil) DropTable(tablename string) error {
   return err
 }
 
-func (s SqlUtil) TableExists(tablename string) bool {
+func (s MysqlUtil) TableExists(tablename string) bool {
   db := s.Conn.Open()
   defer db.Close()
 
@@ -68,7 +68,7 @@ func (s SqlUtil) TableExists(tablename string) bool {
 }
 
 // Simply a wrapper for Go Lang's `sql.Query`.
-func (s SqlUtil) Query(query string, args ...interface{}) (*sql.Rows, error) {
+func (s MysqlUtil) Query(query string, args ...interface{}) (*sql.Rows, error) {
   db := s.Conn.Open()
   defer db.Close()
   rows, err := db.Query(query, args)
@@ -77,7 +77,7 @@ func (s SqlUtil) Query(query string, args ...interface{}) (*sql.Rows, error) {
 }
 
 // Simply a wrapper for Go Lang's `sql.QueryRow`.
-func (s SqlUtil) QueryRow(query string, args ...interface{}) *sql.Row {
+func (s MysqlUtil) QueryRow(query string, args ...interface{}) *sql.Row {
   db := s.Conn.Open()
   defer db.Close()
   row := db.QueryRow(query, args)
@@ -94,13 +94,13 @@ Example:
     Name  string  `mysql:"name VARCHAR(20) NOT NULL"`
   }
 
-  var s SqlUtil
+  var s MysqlUtil
   list := s.FieldList(&Model{})
 
   // list[0]  = "id INT NOT NULL AUTO_INCREMENT"
   // list[1]  = "name VARCAHR(20) NOT NULL"
 */
-func (s SqlUtil) FieldList(i interface{}) (list []string) {
+func (s MysqlUtil) FieldList(i interface{}) (list []string) {
   fields, _ := s.parseFields(i)
 
   for _, field := range fields {
@@ -110,13 +110,27 @@ func (s SqlUtil) FieldList(i interface{}) (list []string) {
   return
 }
 
-func (s SqlUtil) PrimaryKeys(i interface{}) []string {
+/*
+A function used for parsing out the MySQL primary keys of a struct.
+
+Example:
+  type Model struct {
+    Id    int     `mysql:"id INT NOT NULL AUTO_INCREMENT,pk"`
+    Name  string  `mysql:"name VARCHAR(20) NOT NULL"`
+  }
+
+  var s MysqlUtil
+  list := s.PrimaryKeys(&Model{})
+
+  // list[0]  = "id"
+*/
+func (s MysqlUtil) PrimaryKeys(i interface{}) []string {
   _, pks := s.parseFields(i)
 
   return pks
 }
 
-func (s SqlUtil) buildCreateTableStatement(tablename string, i interface{}) (create_statement string) {
+func (s MysqlUtil) buildCreateTableStatement(tablename string, i interface{}) (create_statement string) {
   fields, pks := s.parseFields(i)
   create_statement = "CREATE TABLE IF NOT EXISTS " + tablename + " ("
   create_statement += strings.Join(fields, ",\n")
@@ -131,7 +145,7 @@ func (s SqlUtil) buildCreateTableStatement(tablename string, i interface{}) (cre
   return
 }
 
-func (s SqlUtil) parseFields(i interface{}) (sqlfields, primaryKeys []string) {
+func (s MysqlUtil) parseFields(i interface{}) (sqlfields, primaryKeys []string) {
   var fieldsql string
 
   f := reflect.TypeOf(i).Elem()
