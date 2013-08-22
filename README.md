@@ -53,7 +53,7 @@ func init() {
 	}
 }
 
-// Just a simple Find function, from this I assume You'd be a ble to surmise
+// Just a simple Find function, from this I assume you'd be able to surmise
 // the rest. In your controller you'd call `post := post.Find(3)`. You'd also
 // probably need some error handling, but this is just an example.
 func Find(id int) (p Post) {
