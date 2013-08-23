@@ -60,6 +60,7 @@ func Find(id int) (p Post) {
 	fields := strings.Join(s.FieldList(&Post{}), ",")
 	row := s.QueryRow("SELECT "+fields+" FROM posts WHERE id=?", id)
 	row.Scan(&p.Id, &p.Title, &p.Body, &p.Created, &p.Updated)
+	return
 }
 ```
 
